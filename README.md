@@ -68,11 +68,14 @@ To activate the virtual environment and run commands inside it:
 Here are some example tests using the **WebAgent**:
 
 ```python
+import os
 from src.agent.web_agent.web_agent import WebAgent
 from playwright.sync_api import sync_playwright, Page
+from smolagents import LiteLLMModel
 
 page = sync_playwright().start().chromium.launch(headless=False).new_page()
-agentQ = WebAgent(page, "API_KEY")
+model = LiteLLMModel(model_id="gpt-4o-mini", api_key=os.getenv("OPEN_AI_API_KEY"))
+agentQ = WebAgent(page, model)
 agentQ.init_agent()
 
 # Perform a task using AI and generate Python code
@@ -97,9 +100,11 @@ count = agentQ.do("Count the number of transaction with state 'Complete' in the 
 Here are some example tests using the **FsAgent**:
 
 ```python
+import os
 from src.agent.fs_agent.fs_agent import FsAgent
-
-agentQ = FsAgent("API_KEY")
+from smolagents import LiteLLMModel
+model = LiteLLMModel(model_id="gpt-4o-mini", api_key=os.getenv("OPEN_AI_API_KEY"))
+agentQ = FsAgent(model)
 agentQ.init_agent()
 # Perform a task using AI and generate Python code
 result = agentQ.do("Count the number of files in the folder 'test_folder'")

@@ -12,6 +12,7 @@ playwright = "==1.49.1"
 html-sanitizer = "==2.5.0"
 beautifulsoup4 = "==4.12.3"
 
+
 [dev-packages]
 
 [requires]
