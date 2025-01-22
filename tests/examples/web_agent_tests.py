@@ -19,12 +19,7 @@ def page():
 @pytest.fixture
 def q(page):
     load_dotenv()
-    # model = HfApiModel(
-    #     model_id="Qwen/Qwen2.5-Coder-32B-Instruct",
-    #     token=os.getenv("HF_API_TOKEN")
-    # )
     model = LiteLLMModel(model_id="gpt-4o-mini", api_key=os.getenv("OPEN_AI_API_KEY"))
-
     agent = WebAgent(page, model)
     agent.init_agent()
     return agent

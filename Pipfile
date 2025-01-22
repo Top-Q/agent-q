@@ -11,7 +11,7 @@ litellm = "==1.57.8"
 playwright = "==1.49.1"
 html-sanitizer = "==2.5.0"
 beautifulsoup4 = "==4.12.3"
-
+torch = "==2.5.1"
 
 [dev-packages]
 
