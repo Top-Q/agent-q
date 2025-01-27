@@ -1,5 +1,7 @@
 import os
 import pytest
+from dotenv import load_dotenv
+from smolagents import LiteLLMModel
 
 from src.agent.agentq import AgentQ
 from src.agent.rest_agent.rest_agent import RestAgent
@@ -7,9 +9,10 @@ from src.agent.rest_agent.rest_agent import RestAgent
 
 @pytest.fixture
 def q():
-    api_key = os.environ["OPENAI_API_KEY"]
+    load_dotenv()
+    model = LiteLLMModel(model_id="gpt-4o-mini", api_key=os.getenv("OPEN_AI_API_KEY"))
     base_url = "https://petstore.swagger.io/v2"
-    agent = RestAgent(base_url=base_url, swagger_json_file="../../swagger/swagger_petstore.json", api_key=api_key)
+    agent = RestAgent(base_url=base_url, swagger_json_file="../../swagger/swagger_petstore.json", model=model)
     agent.init_agent()
     return agent
 

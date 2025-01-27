@@ -1,6 +1,6 @@
 import os
 from abc import ABC, abstractmethod
-from smolagents import CodeAgent, LiteLLMModel, tool
+from smolagents import CodeAgent, LiteLLMModel, tool, HfApiModel, Model
 from definitions import root_dir
 from src.agent.code_store import task_code_exists, get_task_code, save_code, add_to_store
 import logging
@@ -48,9 +48,11 @@ class AgentQ(ABC):
     Abstract class for the AI agent. Extend the class to create a new agent with specific tools and prompts.
 
     """
-    def __init__(self, api_key: str, agent_prompt: str, tools: list = []):
+    def __init__(self, model: Model, agent_prompt: str, tools=None):
+        if tools is None:
+            tools = []
         self.agent: CodeAgent = None
-        self.model = LiteLLMModel(model_id="gpt-4o-mini", api_key=api_key)
+        self.model = model
         self.system_prompt = system_prompt + "\n" + agent_prompt
         self.tools = tools
 

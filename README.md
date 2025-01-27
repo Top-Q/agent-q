@@ -5,11 +5,12 @@
 
 By leveraging **LLMs such as GPT**, Agent Q extends their capabilities beyond text-based reasoning, allowing them to **interact with and manipulate the real world** through structured Python code execution. It effectively **adds eyes to the LLM brain**—enabling it to observe environments—and **hands that can perform actions**, making AI more practical and actionable.  
 
-It currently supports **UI testing with Playwright** and **local file system operations** such as **finding and reading files**, but it is **designed to be extendable**, allowing additional tools and capabilities to be integrated.  
+It currently supports **UI testing with Playwright**, **local file system operations** such as **finding and reading files** and **REST Testing**, but it is **designed to be extendable**, allowing additional tools and capabilities to be integrated.  
 
-The package includes two agents:
+The package includes three agents:
 - **WebAgent**: Handles Web UI operations using Playwright.
-- **FsAgent**: Manages local file system operations, such as searching and reading files.  
+- **FsAgent**: Manages local file system operations, such as searching and reading files.
+- **RestAgent**: Manages REST API operations, such as sending requests and validating responses.
 
 Agent Q is designed for extensibility, enabling the creation of new agents for different tasks such as **SQL, HTTP, log analysis, and more**. It not only allows you to **add new tools**, but also makes it easy to **implement custom agents** tailored to your specific needs, ensuring flexibility in automation workflows.  
 
@@ -68,11 +69,14 @@ To activate the virtual environment and run commands inside it:
 Here are some example tests using the **WebAgent**:
 
 ```python
+import os
 from src.agent.web_agent.web_agent import WebAgent
 from playwright.sync_api import sync_playwright, Page
+from smolagents import LiteLLMModel
 
 page = sync_playwright().start().chromium.launch(headless=False).new_page()
-agentQ = WebAgent(page, "API_KEY")
+model = LiteLLMModel(model_id="gpt-4o-mini", api_key=os.getenv("OPEN_AI_API_KEY"))
+agentQ = WebAgent(page, model)
 agentQ.init_agent()
 
 # Perform a task using AI and generate Python code
@@ -97,10 +101,14 @@ count = agentQ.do("Count the number of transaction with state 'Complete' in the 
 Here are some example tests using the **FsAgent**:
 
 ```python
+import os
 from src.agent.fs_agent.fs_agent import FsAgent
+from smolagents import LiteLLMModel
 
-agentQ = FsAgent("API_KEY")
+model = LiteLLMModel(model_id="gpt-4o-mini", api_key=os.getenv("OPEN_AI_API_KEY"))
+agentQ = FsAgent(model)
 agentQ.init_agent()
+
 # Perform a task using AI and generate Python code
 result = agentQ.do("Count the number of files in the folder 'test_folder'")
 assert result == 5
@@ -113,7 +121,20 @@ result = agentQ.do(f"Count the number of files in the folder 'test_folder' and i
 assert result == 10
 
 ```
+Here are some example tests using the **RestAgent**:
 
+```python
+import os
+from smolagents import LiteLLMModel
+from src.agent.rest_agent.rest_agent import RestAgent
+
+model = LiteLLMModel(model_id="gpt-4o-mini", api_key=os.getenv("OPEN_AI_API_KEY"))
+base_url = "https://petstore.swagger.io/v2"
+agent = RestAgent(base_url=base_url, swagger_json_file="swagger_petstore.json", model=model)
+agent.init_agent()
+
+result = agent.do("Add a new pet with the name 'Yoshi'")
+```
 ---
 
 ## **🛠️ How It Works**  

@@ -1,6 +1,7 @@
 import logging
 
 from playwright.sync_api import Page
+from smolagents import Model
 
 from src.agent.agentq import AgentQ
 from src.agent.web_agent import web_tools
@@ -13,12 +14,12 @@ class WebAgent(AgentQ):
     Agent for web automation tasks using Playwright based tools.
     """
 
-    def __init__(self, page: Page, api_key: str):
+    def __init__(self, page: Page, model: Model):
         """
         :param page: Playwright page object
-        :param api_key: OpenAI API key
+        :param model: Model to use for the agent
         """
-        super().__init__(api_key=api_key, agent_prompt=agent_prompt, tools=tools)
+        super().__init__(model=model, agent_prompt=agent_prompt, tools=tools)
         self.page = page
 
     def get_code_imports(self):

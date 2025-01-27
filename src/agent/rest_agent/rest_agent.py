@@ -1,6 +1,8 @@
 import logging
 from pathlib import Path
 
+from smolagents import Model
+
 from src.agent.agentq import AgentQ
 from src.agent.rest_agent.rest_tools import tools
 from src.agent.rest_agent.prompt import agent_prompt
@@ -9,8 +11,8 @@ log = logging.getLogger(__name__)
 
 class RestAgent(AgentQ):
 
-    def __init__(self, base_url: str, swagger_json_file: str, api_key: str):
-        super().__init__(api_key=api_key, agent_prompt=agent_prompt, tools=tools)
+    def __init__(self, base_url: str, swagger_json_file: str, model: Model):
+        super().__init__(model=model, agent_prompt=agent_prompt, tools=tools)
         self.base_url = base_url
         self.swagger_json = Path(swagger_json_file).read_text()
 

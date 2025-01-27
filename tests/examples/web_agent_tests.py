@@ -2,6 +2,7 @@ import os
 import pytest
 from dotenv import load_dotenv
 from playwright.sync_api import sync_playwright, Page
+from smolagents import LiteLLMModel
 
 from src.agent.agentq import AgentQ
 from src.agent.web_agent.web_agent import WebAgent
@@ -18,8 +19,8 @@ def page():
 @pytest.fixture
 def q(page):
     load_dotenv()
-    api_key = os.getenv("API_KEY")
-    agent = WebAgent(page, api_key)
+    model = LiteLLMModel(model_id="gpt-4o-mini", api_key=os.getenv("OPEN_AI_API_KEY"))
+    agent = WebAgent(page, model)
     agent.init_agent()
     return agent
 
