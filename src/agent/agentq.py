@@ -48,11 +48,15 @@ class AgentQ(ABC):
     Abstract class for the AI agent. Extend the class to create a new agent with specific tools and prompts.
 
     """
-    def __init__(self, model: Model, agent_prompt: str, tools=None):
+    def __init__(self, model: Model, agent_prompt: str, tools=None, **kwargs):
         if tools is None:
             tools = []
         self.agent: CodeAgent = None
         self.model = model
+
+        for key, value in kwargs.items():
+            agent_prompt = agent_prompt.replace("{{" + key + "}}", value)
+
         self.system_prompt = system_prompt + "\n" + agent_prompt
         self.tools = tools
 
@@ -70,7 +74,7 @@ class AgentQ(ABC):
             tools=self.tools,
             model=self.model,
             add_base_tools=False,
-            additional_authorized_imports=["pytest", "time"]
+            additional_authorized_imports=["pytest", "time", "json"]
         )
 
     def do(self, task: str, force_regenerate: bool = False) -> any:
@@ -84,7 +88,7 @@ class AgentQ(ABC):
         if not force_regenerate and task_code_exists(task):
             python_code_snippet = get_task_code(task)
             return self.__perform_code(python_code_snippet)
-        result = self.agent.run(task=self.system_prompt + "\n" + task, single_step=False)
+        result = self.agent.run(task=self.system_prompt + "\n\n" + task, single_step=False)
         code_identifier = save_code()
         if code_identifier:
             add_to_store(code_identifier, task)
