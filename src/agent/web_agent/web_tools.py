@@ -28,7 +28,6 @@ def get_page_html() -> str:
     """
     page: Page = ctx.get("page")
     html = sanitize_html(page.content())
-    print(f"HTML Snapshot: {html}")
     return html
 
 

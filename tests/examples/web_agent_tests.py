@@ -35,7 +35,7 @@ def test_fill_realistic_values(page: Page, q: AgentQ):
     Test generate realistic data for the login page of the ACME bank
     """
     page.goto("https://demo.applitools.com/")
-    q.do("Fill all the login page input fields with realistic data and click on the sign in button")
+    q.do("Fill all the login page input fields with realistic data and click on the sign in button", force_regenerate=False)
 
 def test_perform_signin(page: Page, q: AgentQ):
     page.goto("https://demo.applitools.com/")

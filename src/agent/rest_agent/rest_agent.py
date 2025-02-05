@@ -1,5 +1,6 @@
 import logging
 from pathlib import Path
+from typing import Optional, Dict
 
 from smolagents import Model
 
@@ -19,7 +20,9 @@ class RestAgent(AgentQ):
     def get_code_imports(self):
         return "from src.agent.rest_agent.rest_tools import *"
 
-    def do(self, task: str, force_regenerate: bool = False) -> any:
-        task = f"{task}\n Use the following Base URL: {self.base_url}\n Use the following Swagger JSON:\n {self.swagger_json}"
+    def do(self, task: str, force_regenerate: bool = False, additional_args: Optional[Dict] = None) -> any:
+        additional_args = additional_args or {}
+        additional_args["Base URL"] = self.base_url
+        additional_args["Swagger JSON"] = self.swagger_json
         log.debug(f"Running task: {task}")
-        return super().do(task=task, force_regenerate=force_regenerate)
+        return super().do(task=task, force_regenerate=force_regenerate, additional_args=additional_args)

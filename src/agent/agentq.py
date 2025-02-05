@@ -1,5 +1,7 @@
 import os
 from abc import ABC, abstractmethod
+from typing import Optional, Dict
+
 from smolagents import CodeAgent, LiteLLMModel, tool, HfApiModel, Model
 from definitions import root_dir
 from src.agent.code_store import task_code_exists, get_task_code, save_code, add_to_store
@@ -73,18 +75,19 @@ class AgentQ(ABC):
             additional_authorized_imports=["pytest", "time", "json"]
         )
 
-    def do(self, task: str, force_regenerate: bool = False) -> any:
+    def do(self, task: str, force_regenerate: bool = False, additional_args: Optional[Dict] = None) -> any:
         """
         Perform the task. If the task is already saved in the code store, use the saved code.
 
         :param task: task to perform
         :param force_regenerate: force the agent to regenerate the code
+        :param additional_args: additional arguments for the task
         :return: result of the task
         """
         if not force_regenerate and task_code_exists(task):
             python_code_snippet = get_task_code(task)
             return self.__perform_code(python_code_snippet)
-        result = self.agent.run(task=self.system_prompt + "\n" + task, single_step=False)
+        result = self.agent.run(task=self.system_prompt + "\n" + task, single_step=False, additional_args=additional_args)
         code_identifier = save_code()
         if code_identifier:
             add_to_store(code_identifier, task)
