@@ -1,7 +1,6 @@
-from typing import Tuple
+import json
 
 import requests
-
 from smolagents import tool
 
 
@@ -37,4 +36,38 @@ def post_request(url: str, request_body: dict, headers: dict) -> str:
     return response.text
 
 
-tools = [get_request, post_request]
+@tool
+def find_json_key(json_str: str, key: str) -> any:
+    """
+    Searches for a given key in a JSON string and returns its value.
+    Supports nested dictionaries and lists.
+
+    Args:
+        json_str: A string representation of a JSON object.
+        key: The key to search for.
+
+    :return: The value of the key if found, otherwise None.
+    """
+    def search(data, key):
+        if isinstance(data, dict):
+            if key in data:
+                return data[key]
+            for value in data.values():
+                result = search(value, key)
+                if result is not None:
+                    return result
+        elif isinstance(data, list):
+            for item in data:
+                result = search(item, key)
+                if result is not None:
+                    return result
+        return None
+
+    try:
+        json_data = json.loads(json_str)
+        return search(json_data, key)
+    except json.JSONDecodeError:
+        raise ValueError("Invalid JSON string")
+
+
+tools = [get_request, post_request, find_json_key]

@@ -70,7 +70,7 @@ class AgentQ(ABC):
             tools=self.tools,
             model=self.model,
             add_base_tools=False,
-            additional_authorized_imports=["pytest", "time"]
+            additional_authorized_imports=["pytest", "time", "json"]
         )
 
     def do(self, task: str, force_regenerate: bool = False) -> any:

@@ -34,7 +34,9 @@ Generate Python code snippets for interacting with a RESTful API by sending HTTP
 - If the API requires authentication (e.g., API keys, Bearer tokens), extract the authentication method from the Swagger JSON and ensure the appropriate headers or parameters are included in the request.
 
 ### 8. Returned Result:
--  Always return a result that contains the response body as a text string.
+- Always return a result that contains the response body as a text string.
+- After receiving the response to the request, only return the response body as text string. Do not continue performing any additional actions. 
+
 
 ### 9. What to do in case of an error in the response:
 - Even if the response status code is other than 200 - you only need to return the original response body as text.
