@@ -14,7 +14,8 @@ FOLDER = os.path.join(root_dir,TEST_FOLDER)
 def q():
     load_dotenv()
     model = HfApiModel(
-        model_id="Qwen/Qwen2.5-Coder-32B-Instruct",
+        # model_id="Qwen/Qwen2.5-Coder-32B-Instruct",
+        model_id="meta-llama/llama-3.2-3B-Instruct",
         token=os.getenv("HF_API_TOKEN")
     )
     agent = FsAgent(model)

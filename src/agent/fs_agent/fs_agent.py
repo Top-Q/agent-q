@@ -1,4 +1,5 @@
 import logging
+from typing import Optional, Dict
 
 from smolagents import Model
 
@@ -15,6 +16,6 @@ class FsAgent(AgentQ):
     def get_code_imports(self):
         return "from src.agent.fs_agent.fs_tools import *"
 
-    def do(self, task: str, force_regenerate: bool = False) -> any:
+    def do(self, task: str, force_regenerate: bool = False, additional_args: Optional[Dict] = None) -> any:
         log.debug(f"Running task: {task}")
         return super().do(task= task, force_regenerate=force_regenerate)

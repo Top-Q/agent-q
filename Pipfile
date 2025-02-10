@@ -13,7 +13,7 @@ html-sanitizer = "==2.5.0"
 beautifulsoup4 = "==4.12.3"
 requests = "==2.32.3"
 torch = "==2.5.1"
-
+ollama = "==0.4.7"
 [dev-packages]
 
 [requires]
