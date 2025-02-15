@@ -1,5 +1,6 @@
 import os
 import pytest
+from anyio import sleep
 from dotenv import load_dotenv
 from playwright.sync_api import sync_playwright, Page
 from smolagents import LiteLLMModel
@@ -70,3 +71,22 @@ def test_open_project(page: Page, q: AgentQ):
     q.do("Click on 'Demo project' link")
     q.do("Click on the 'Work packages' link", force_regenerate=False)
 
+def test_perform_operations_on_open_project(page: Page, q: AgentQ):
+    page.goto('http://localhost:8080')
+    page.get_by_role(role='link', name='Sign in').click()
+    page.get_by_label('Username').fill('admin')
+    page.get_by_label('Password').fill('adminadmin')
+    page.get_by_role('button',name= 'Sign in').click()
+    page.get_by_role('link', name= 'Select a project ').click()
+    page.locator('#ui-id-2').get_by_role('link', name='Demo project').click()
+    page.locator('#main-menu-work-packages').click()
+    sleep(5)
+    task_id =q.do("Get the ID value of TASK with subject 'Setup conference website' from the table as integer")
+    sleep(1)
+    print(f"The ID of the task is {task_id}")
+    page.get_by_role("link", name=f"{task_id}", exact=True).click()
+    estimated_time = q.do("Get the 'Estimated time' of the task")
+    print(f"The estimated time of the task is {estimated_time}H")
+
+    task_details = q.do("Get all the text under the 'Details' section of the task")
+    print(f"The details of the task are {task_details}")

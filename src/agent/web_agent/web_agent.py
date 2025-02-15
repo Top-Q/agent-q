@@ -38,7 +38,7 @@ class WebAgent(AgentQ):
         log.debug(f"Running task: {task}")
         web_tools.ctx = {"page": self.page}
         additional_args = additional_args or {}
-        additional_args["html snapshot"] =get_page_html()
-        additional_args["aria snapshot"] = get_aria_snapshot()
+        additional_args["HTML snapshot"] = get_page_html()
+        # additional_args["ARIA snapshot"] = get_aria_snapshot()
         return super().do(task= task, force_regenerate=force_regenerate, additional_args=additional_args)
 

@@ -72,6 +72,7 @@ class AgentQ(ABC):
             tools=self.tools,
             model=self.model,
             add_base_tools=False,
+            max_steps=20,
             additional_authorized_imports=["pytest", "time", "json"]
         )
 
@@ -87,7 +88,10 @@ class AgentQ(ABC):
         if not force_regenerate and task_code_exists(task):
             python_code_snippet = get_task_code(task)
             return self.__perform_code(python_code_snippet)
-        result = self.agent.run(task=self.system_prompt + "\n" + task, single_step=False, additional_args=additional_args)
+        result = self.agent.run(
+            task=self.system_prompt + "\n" + task,
+            single_step=False,
+            additional_args=additional_args)
         code_identifier = save_code()
         if code_identifier:
             add_to_store(code_identifier, task)

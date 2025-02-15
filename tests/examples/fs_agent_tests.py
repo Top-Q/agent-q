@@ -1,7 +1,7 @@
 import os
 import pytest
 from dotenv import load_dotenv
-from smolagents import LiteLLMModel
+from smolagents import LiteLLMModel, OpenAIServerModel
 
 from definitions import root_dir
 from src.agent.agentq import AgentQ
